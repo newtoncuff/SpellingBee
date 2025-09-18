@@ -1,0 +1,80 @@
+.feedback-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.feedback-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: 90%;
+  z-index: 1000;
+}
+
+.feedback-popup.correct {
+  border: 3px solid #2ecc71;
+}
+
+.feedback-popup.incorrect {
+  border: 3px solid #e74c3c;
+}
+
+.feedback-popup h3 {
+  margin-top: 0;
+  font-size: 1.5rem;
+}
+
+.feedback-popup.correct h3 {
+  color: #2ecc71;
+}
+
+.feedback-popup.incorrect h3 {
+  color: #e74c3c;
+}
+
+.feedback-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.feedback-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  min-width: 120px;
+}
+
+.retry-button {
+  background-color: #f39c12;
+  color: white;
+}
+
+.retry-button:hover {
+  background-color: #e67e22;
+}
+
+.next-puzzle-button {
+  background-color: #3498db;
+  color: white;
+}
+
+.next-puzzle-button:hover {
+  background-color: #2980b9;
+}

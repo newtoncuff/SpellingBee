@@ -1,0 +1,206 @@
+.fireworks-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(45deg, #1e3c72, #2a5298, #1e3c72);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: backgroundGlow 5s ease-in-out;
+}
+
+.celebration-content {
+  text-align: center;
+  color: white;
+  z-index: 10000;
+  animation: celebrationBounce 2s ease-in-out infinite alternate;
+}
+
+.celebration-title {
+  font-size: 4rem;
+  margin: 0;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+  animation: titleGlow 1s ease-in-out infinite alternate;
+}
+
+.celebration-subtitle {
+  font-size: 2rem;
+  margin: 10px 0;
+  color: #ffd700;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+}
+
+.celebration-message {
+  font-size: 1.5rem;
+  margin: 20px 0;
+  color: #87ceeb;
+}
+
+/* Firework animations */
+.firework {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  animation: launch 1s ease-out infinite;
+}
+
+.firework-1 {
+  left: 20%;
+  animation-delay: 0.2s;
+}
+
+.firework-2 {
+  left: 80%;
+  animation-delay: 0.8s;
+}
+
+.firework-3 {
+  left: 40%;
+  animation-delay: 1.5s;
+}
+
+.firework-4 {
+  left: 60%;
+  animation-delay: 2.2s;
+}
+
+.firework-5 {
+  left: 30%;
+  animation-delay: 3s;
+}
+
+.firework-6 {
+  left: 70%;
+  animation-delay: 3.7s;
+}
+
+.explosion {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: explode 0.8s ease-out infinite;
+}
+
+/* Keyframe animations */
+@keyframes backgroundGlow {
+  0%, 100% {
+    background: linear-gradient(45deg, #1e3c72, #2a5298, #1e3c72);
+  }
+  50% {
+    background: linear-gradient(45deg, #2a5298, #3f72af, #2a5298);
+  }
+}
+
+@keyframes celebrationBounce {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes titleGlow {
+  from {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+  }
+  to {
+    text-shadow: 0 0 30px rgba(255, 255, 255, 1), 0 0 40px rgba(255, 215, 0, 0.5);
+  }
+}
+
+@keyframes launch {
+  0% {
+    bottom: 0;
+    opacity: 1;
+  }
+  70% {
+    bottom: 80%;
+    opacity: 1;
+  }
+  100% {
+    bottom: 85%;
+    opacity: 0;
+  }
+}
+
+@keyframes explode {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+    box-shadow: 
+      0 0 0 0 #ff6b6b,
+      0 0 0 0 #4ecdc4,
+      0 0 0 0 #45b7d1,
+      0 0 0 0 #96ceb4,
+      0 0 0 0 #ffeaa7,
+      0 0 0 0 #dda0dd,
+      0 0 0 0 #ff7675;
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.3);
+    box-shadow: 
+      20px 20px 0 0 #ff6b6b,
+      -20px 20px 0 0 #4ecdc4,
+      20px -20px 0 0 #45b7d1,
+      -20px -20px 0 0 #96ceb4,
+      30px 0 0 0 #ffeaa7,
+      -30px 0 0 0 #dda0dd,
+      0 30px 0 0 #ff7675;
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 
+      80px 80px 0 -5px #ff6b6b,
+      -80px 80px 0 -5px #4ecdc4,
+      80px -80px 0 -5px #45b7d1,
+      -80px -80px 0 -5px #96ceb4,
+      120px 0 0 -5px #ffeaa7,
+      -120px 0 0 -5px #dda0dd,
+      0 120px 0 -5px #ff7675,
+      60px 60px 0 -5px #fd79a8,
+      -60px -60px 0 -5px #fdcb6e;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+    box-shadow: 
+      150px 150px 0 -10px transparent,
+      -150px 150px 0 -10px transparent,
+      150px -150px 0 -10px transparent,
+      -150px -150px 0 -10px transparent,
+      200px 0 0 -10px transparent,
+      -200px 0 0 -10px transparent,
+      0 200px 0 -10px transparent,
+      120px 120px 0 -10px transparent,
+      -120px -120px 0 -10px transparent;
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+  .celebration-title {
+    font-size: 2.5rem;
+  }
+  
+  .celebration-subtitle {
+    font-size: 1.3rem;
+  }
+  
+  .celebration-message {
+    font-size: 1.1rem;
+  }
+  
+  .explosion {
+    width: 200px;
+    height: 200px;
+  }
+}

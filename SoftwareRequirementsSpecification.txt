@@ -1,0 +1,576 @@
+## Initialization and Pre-requisites
+
+### 0.1 System Requirements
+- **OS:** Windows 10 or later
+- **IDE:** Visual Studio Code (VS Code)
+- **Package Managers:** Node.js (with npm or yarn), Python (with pip)
+- **Database:** SQLite
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+### 0.2 Pre-requisites Installation Steps
+
+#### 0.2.1 Install Node.js & npm (for React + TypeScript frontend)
+- Download and install Node.js (includes npm):  
+  [https://nodejs.org/](https://nodejs.org/)
+- Verify installation:
+  ```sh
+  node -v
+  npm -v
+  ```
+
+#### 0.2.2 Install Python (for Flask backend)
+- Download and install Python 3.x:  
+  [https://www.python.org/downloads/](https://www.python.org/downloads/)
+- Add Python to your PATH during installation.
+- Verify installation:
+  ```sh
+  python --version
+  pip --version
+  ```
+
+#### 0.2.3 Install SQLite
+- Download and install SQLite:  
+  [https://www.sqlite.org/download.html](https://www.sqlite.org/download.html)
+- (Optional) Add SQLite to PATH for command-line usage.
+- Verify installation:
+  ```sh
+  sqlite3 --version
+  ```
+
+#### 0.2.4 Install VS Code Extensions (recommended)
+- **Python**
+- **ESLint**
+- **Prettier**
+- **Jest**
+- **SQLite**
+- **React/TypeScript Snippets**
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+### 0.3 Project Initialization Steps
+
+#### 0.3.1 Create Project Directory Structure
+```sh
+mkdir spelling-learner-webapp
+cd spelling-learner-webapp
+mkdir backend frontend
+```
+
+#### 0.3.2 Initialize the Backend (Flask + SQLite)
+```sh
+cd backend
+python -m venv venv
+venv\Scripts\activate    # (Windows, Powershell) or venv\Scripts\activate.bat (cmd)
+pip install Flask flask-cors sqlite3
+echo > app.py
+echo > requirements.txt
+# Add Flask and flask-cors to requirements.txt
+pip freeze > requirements.txt
+```
+
+#### 0.3.3 Initialize the Frontend (React + TypeScript)
+```sh
+cd ../frontend
+npx create-react-app . --template typescript
+npm install --save eslint prettier jest @testing-library/react @testing-library/jest-dom
+mkdir src/components
+```
+
+#### 0.3.4 Git Initialization
+```sh
+cd ..
+git init
+echo "venv/" > backend/.gitignore
+echo "node_modules/" > frontend/.gitignore
+echo ".DS_Store" > .gitignore
+```
+
+#### 0.3.5 VS Code Workspace Setup (optional)
+- Open the root folder in VS Code:
+  - `File > Open Folder...`
+- Configure workspace settings as needed.
+
+#### 0.3.6 Run Initial Development Servers
+- **Backend:**
+  ```sh
+  cd backend
+  venv\Scripts\activate
+  python app.py
+  ```
+- **Frontend:**
+  ```sh
+  cd ../frontend
+  npm start
+  ```
+- Access frontend at `http://localhost:3000` and backend at `http://localhost:5000` (default Flask port).
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+### 0.4 Additional Setup
+
+- Ensure both frontend and backend can communicate (CORS should be enabled in Flask).
+- Create initial database schema using SQLite commands or script.
+- Initialize ESLint and Prettier configs for code linting and formatting.
+  ```sh
+  npx eslint --init
+  npx prettier --write .
+  ```
+- Confirm all dependencies are installed and servers run without errors.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+### 0.5 Checklist for First-Time Initialization
+
+- [ ] Node.js and npm installed
+- [ ] Python 3.x and pip installed
+- [ ] SQLite installed
+- [ ] VS Code installed and extensions added
+- [ ] Project folder created with backend and frontend subfolders
+- [ ] Backend virtual environment created and dependencies installed
+- [ ] Frontend scaffolded with React + TypeScript
+- [ ] Git initialized and .gitignore files created
+- [ ] Servers tested and running locally
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+**After completing these steps, you are ready to begin development according to the SRS.**
+
+# Software Requirements Specification (SRS)
+
+## 1. Document Control
+- **Project Name:** SpellingBee
+- **Version:** 1.0
+- **Date:** 2025-09-16
+- **Authors:** newtoncuff
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 2. Introduction
+
+### 2.1 Purpose
+The Spelling Learner Web App is designed to help children improve spelling skills by interacting with image-based word puzzles. The app presents words of varying difficulty (3–10 letters) alongside a relevant image, prompting users to fill in missing letters using a selectable alphabet. The application is intended for educational use.
+
+### 2.2 Scope
+The app enables children to:
+- Select a difficulty level (easy, medium, hard) based on word length.
+- Solve spelling puzzles by selecting letters to fill blanks.
+- View immediate visual feedback on their selections.
+- Avoid repetition of word/image combos within a session.
+All data, including words, images, user progress, and task history, will be stored in a SQLite database. The backend will be implemented in Python using Flask.
+
+### 2.3 Definitions, Acronyms, and Abbreviations
+- **Task:** A single spelling puzzle.
+- **Combo:** Word/image pairing.
+- **Difficulty:** Word length grouping (easy: 3–5, medium: 5–7, hard: 7–10).
+- **Blank:** A missing letter in a word.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 3. Overall Description
+
+### 3.1 Product Perspective
+A standalone educational web app, not integrated with external systems. Backend in Python (Flask), frontend with standard web technologies.
+
+### 3.2 User Classes and Characteristics
+- **Child User:** Solves spelling puzzles, interacts via touch or mouse.
+- **Parent/Admin:** (Optional) May add/manage word/image sets or review progress.
+
+### 3.3 Operating Environment
+- Supported browsers: Chrome, Firefox, Edge, Safari (current versions)
+- Devices: Desktop, tablet, mobile
+- Backend: Python (Flask)
+- Database: SQLite
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 4. Functional Requirements
+
+### 4.1 Difficulty Selection
+- Users can choose difficulty (easy: 3–5 letters, medium: 5–7, hard: 7–10).
+- The app generates puzzles accordingly.
+
+### 4.2 Puzzle Generation
+- App selects a random word (matching difficulty) and its associated image.
+- Randomly removes letters from the word for user to fill in.
+- Ensures the same word/image combo is not shown within the previous 10 tasks.
+
+### 4.3 Interactive Puzzle Solving
+- Display the word with missing letters as blanks.
+- Show a relevant image above the word.
+- Alphabet displayed below: all letters in **white** with a **black border**, always selectable, unchanged on selection.
+- When a user clicks a letter:
+  - The letter fills the **next blank in order** (left to right).
+  - If correct:
+    - Letter turns **green**.
+    - A **check mark** appears above the letter.
+    - Blank remains filled.
+  - If incorrect:
+    - Letter turns **red**.
+    - Blank is cleared after **2 seconds**.
+- Only the next blank is active for input, enforcing sequential filling.
+- Letters in the alphabet can be selected multiple times (to fill same letter in word).
+
+### 4.4 User Progress Tracking
+- Track completed tasks and accuracy.
+- Optionally allow review of progress by parent/admin.
+
+### 4.5 Data Management
+- Store all words, images, combos, tasks, and user progress in SQLite.
+- Admin interface (optional) for adding/removing words and images.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 5. Non-Functional Requirements
+
+### 5.1 Performance
+- <500ms response time for puzzle generation and UI feedback.
+
+### 5.2 Reliability
+- App should recover gracefully from errors and not crash.
+
+### 5.3 Security
+- No personal data required; basic protection against script injection.
+
+### 5.4 Usability
+- Accessible, large buttons, clear visuals, colorblind-friendly palette, touch-friendly.
+
+### 5.5 Maintainability
+- Modular codebase, documented functions, easy to update word/image sets.
+
+### 5.6 Portability
+- Works across major browsers and mobile devices.
+
+### 5.7 Accessibility
+- All images must have descriptive alt text.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 6. System Architecture
+
+### 6.1 Technology Stack
+- **Frontend:** HTML5, CSS3, JavaScript (optionally React or vanilla JS)
+- **Backend:** Python (Flask)
+- **Languages:** Python (backend), JavaScript (frontend)
+- **Database:** SQLite
+- **APIs:** RESTful endpoints (Flask)
+- **Cloud/Hosting:** Heroku, Vercel, Netlify, or similar
+
+### 6.2 Component Overview
+- **Frontend:** UI components (task display, alphabet, feedback, difficulty selector)
+- **Backend:** Flask API endpoints (get task, submit answer, manage words/images)
+- **Database:** Tables for words, images, combos, tasks, user progress
+
+### 6.3 Frontend Component Structure & Standards
+- The frontend will be developed in **React** using **TypeScript**.
+- All React components must reside in a dedicated `/src/components/` directory.
+- Each component must have its own folder containing:
+  - The main `.tsx` file
+  - A `.module.css` or `.scss` file for styles (if applicable)
+  - An optional `index.ts` for exports
+  - Related tests in a `__tests__` subfolder
+- Components must be named using **PascalCase** (e.g., `PuzzleWord.tsx`, `AlphabetSelector.tsx`, `FeedbackPopup.tsx`, `DifficultySelector.tsx`, `ImageDisplay.tsx`).
+- Component props and state must use strict TypeScript interfaces/types.
+- No inline styles except for dynamic properties; all static styles in CSS modules or SCSS.
+- Components must be **atomic and reusable**—each should have a single responsibility.
+
+### 6.4 Example Component Organization
+```
+/src/components/
+  /PuzzleWord/
+    PuzzleWord.tsx
+    PuzzleWord.module.css
+    __tests__/
+      PuzzleWord.test.tsx
+  /AlphabetSelector/
+    AlphabetSelector.tsx
+    AlphabetSelector.module.css
+    __tests__/
+      AlphabetSelector.test.tsx
+  /FeedbackPopup/
+    FeedbackPopup.tsx
+    FeedbackPopup.module.css
+    __tests__/
+      FeedbackPopup.test.tsx
+  /DifficultySelector/
+    DifficultySelector.tsx
+    DifficultySelector.module.css
+    __tests__/
+      DifficultySelector.test.tsx
+  /ImageDisplay/
+    ImageDisplay.tsx
+    ImageDisplay.module.css
+    __tests__/
+      ImageDisplay.test.tsx
+```
+
+### 6.5 API Documentation
+- All Flask API endpoints must be documented using Swagger/OpenAPI or Markdown for maintainability.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 7. Data Design
+
+### 7.1 Database Schema
+- **words:** id, text, difficulty, image_id
+- **images:** id, file_path, description
+- **combos:** id, word_id, image_id
+- **tasks:** id, user_id, combo_id, date, completed, correct
+- **users:** id (optional; for tracking progress)
+
+### 7.2 Data Validation
+- Words: 3–10 letters; images linked to words; no duplicate combos.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 8. UI/UX Requirements
+
+### 8.1 Main Puzzle Screen
+- Shows image, puzzle word (with blanks), alphabet below.
+- Alphabet: white letters, black border, large clickable/touchable buttons.
+- Clicking a letter fills the next blank in order.
+  - Correct: green letter, check mark above.
+  - Incorrect: red letter, removed after 2 seconds.
+
+### 8.2 Sequential Blank Filling
+- Only the next blank is active.
+- Letters filled left to right.
+
+### 8.3 Alphabet Display
+- Always shows all letters, unchanged on selection.
+- Allows repeated selection of same letter for multiple blanks.
+
+### 8.4 Feedback
+- Visual feedback for correct/incorrect guesses.
+- Optional summary/progress for parents/admins.
+
+### 8.5 Device Accessibility
+- Touch-friendly, responsive layout, accessible color palette.
+
+### 8.6 Component Documentation & Reusability
+- Every component must be documented with JSDoc comments.
+- Prop types must be strictly typed and validated.
+- Components should be easy to extend or reuse in future features.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 9. Integration Requirements
+
+- No external systems required.
+- Optional: admin upload interface for words/images.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 10. Security Requirements
+
+- Authentication for admin (optional); child users do not log in.
+- Secure storage of words/images; no sensitive data.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 11. Testing & Quality Assurance
+
+### 11.1 Testing Strategy
+- Unit tests for backend logic (Flask).
+- Integration tests for endpoints.
+- Manual/automated UI tests for puzzle interaction.
+
+### 11.2 Acceptance Criteria
+- When a letter is selected, it appears in the current blank.
+- Correct letters turn green with a check mark above.
+- Incorrect letters turn red and are removed after 2 seconds.
+- Alphabet letters remain white with black borders and are always selectable.
+- Multiple blanks are filled in order.
+- Letters can be selected multiple times if needed.
+- No repeats of word/image combos within 10 tasks.
+- App loads quickly and is touch-friendly.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 12. Deployment & Maintenance
+
+### 12.1 Deployment Pipeline
+- CI/CD via GitHub Actions to Heroku/Vercel/Netlify.
+
+### 12.2 Monitoring
+- Basic uptime monitoring; error logging.
+
+### 12.3 Maintenance Plan
+- Update word/image sets as needed; bug fixes via GitHub Issues.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 13. Appendix
+
+### 13.1 Assumptions & Dependencies
+- Images are provided and properly licensed.
+- SQLite is suitable for intended scale.
+- App is for educational, non-commercial use.
+
+### 13.2 References
+- [Flask Documentation](https://flask.palletsprojects.com/)
+- [SQLite Documentation](https://sqlite.org/)
+- [JavaScript Documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 14. Change Log
+
+- **2025-09-16** | Initial SRS draft | newtoncuff
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 15. Development Process & Coding Standards
+
+### 15.1 Component Naming
+- All files and folders use **PascalCase** for components.
+- No ambiguous names—names should reflect the component's function.
+
+### 15.2 TypeScript Usage
+- All props, state, and API data use strict TypeScript interfaces or types.
+- No usage of `any` type unless absolutely necessary (and documented).
+
+### 15.3 Linting & Formatting
+- Use `eslint` and `prettier` with strict settings for TypeScript and React.
+- CI pipeline must fail on lint or type errors.
+
+### 15.4 Testing
+- Each component must have at least one unit test in `/__tests__/`.
+- Use Jest and React Testing Library for frontend tests.
+
+### 15.5 Code Review
+- All pull requests require review before merging.
+- Code must adhere to documented standards.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 16. Deployment via Docker
+
+### 16.1 Docker Deployment Overview
+
+- The application will be containerized using Docker for both backend (Flask) and frontend (React + TypeScript).
+- SQLite database will be stored on a Docker volume for persistent data.
+- Deployment orchestration will be managed with `docker-compose` to run both services and mount the database.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+### 16.2 Docker Prerequisites
+
+- Install Docker Desktop for Windows: [https://www.docker.com/products/docker-desktop/](https://www.docker.com/products/docker-desktop/)
+- Verify installation:
+  ```sh
+  docker --version
+  docker-compose --version
+  ```
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+### 16.3 Project Structure for Docker
+
+```
+spelling-learner-webapp/
+  backend/
+    app.py
+    requirements.txt
+    Dockerfile
+  frontend/
+    (React app files)
+    Dockerfile
+  docker-compose.yml
+  data/
+    (created for sqlite volume)
+```
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+### 16.4 Example Dockerfiles and Compose
+
+#### Backend Dockerfile (`backend/Dockerfile`)
+```dockerfile name=backend/Dockerfile
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+EXPOSE 5000
+
+CMD ["python", "app.py"]
+```
+
+#### Frontend Dockerfile (`frontend/Dockerfile`)
+```dockerfile name=frontend/Dockerfile
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY . .
+
+RUN npm run build
+
+EXPOSE 3000
+
+# Serve production build with a simple static server
+RUN npm install -g serve
+CMD ["serve", "-s", "build", "-l", "3000"]
+```
+
+#### Docker Compose File (`docker-compose.yml`)
+```yaml name=docker-compose.yml
+version: '3.9'
+
+services:
+  backend:
+    build: ./backend
+    container_name: spelling_backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - FLASK_ENV=production
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: spelling_frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+
+volumes:
+  data:
+```
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+### 16.5 Docker Usage Steps
+
+1. Build and start all containers:
+    ```sh
+    docker-compose up --build
+    ```
+2. The React app will be available at [http://localhost:3000](http://localhost:3000)
+3. The Flask backend will be available at [http://localhost:5000](http://localhost:5000)
+4. SQLite data will be persisted in the `data/` folder.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+### 16.6 Additional Notes
+
+- Make sure the backend API allows connections from the frontend container (CORS).
+- For production, consider using Nginx as a reverse proxy if required.
+- For static image serving, ensure Flask serves files from `/app/data` or similar.
+- Update `requirements.txt` and `package.json` as needed.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

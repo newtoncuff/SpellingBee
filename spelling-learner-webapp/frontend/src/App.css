@@ -1,0 +1,101 @@
+/* App.css */
+.App {
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.App-header {
+  background-color: #282c34;
+  padding: 20px;
+  color: white;
+  border-radius: 8px 8px 0 0;
+}
+
+.App-main {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.loading {
+  font-size: 1.5rem;
+  margin: 20px;
+}
+
+.no-puzzle {
+  font-size: 1.5rem;
+  margin: 20px;
+  color: #666;
+}
+
+/* Submit button styles */
+.submit-section {
+  margin: 30px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.submit-button {
+  padding: 20px 40px;
+  font-size: 2rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  min-width: 180px;
+}
+
+.submit-button.enabled {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+  transform: scale(1);
+}
+
+.submit-button.enabled:hover {
+  background: linear-gradient(135deg, #c0392b, #a93226);
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.submit-button.enabled:active {
+  transform: scale(0.98);
+}
+
+.submit-button.disabled {
+  background: linear-gradient(135deg, #bdc3c7, #95a5a6);
+  color: #7f8c8d;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+  .App {
+    padding: 10px;
+  }
+
+  .App-header,
+  .App-main {
+    padding: 15px;
+  }
+
+  .submit-button {
+    padding: 15px 30px;
+    font-size: 1.5rem;
+    min-width: 140px;
+  }
+}

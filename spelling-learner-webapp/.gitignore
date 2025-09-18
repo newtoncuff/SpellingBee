@@ -1,0 +1,36 @@
+# Backend
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+backend/*.pyo
+backend/*.pyd
+
+# Python cache files (anywhere in project)
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Frontend
+frontend/node_modules/
+frontend/build/
+frontend/.env
+frontend/npm-debug.log
+frontend/yarn-debug.log
+frontend/yarn-error.log
+
+# Database
+data/*.db
+data/images/*
+!data/images/.gitkeep
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db

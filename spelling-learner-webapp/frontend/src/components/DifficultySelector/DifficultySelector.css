@@ -1,0 +1,48 @@
+.difficulty-selector {
+  margin-bottom: 20px;
+  visibility: hidden;
+}
+
+.difficulty-selector h2 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.difficulty-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.difficulty-button {
+  padding: 8px 16px;
+  border-radius: 20px;
+  background-color: white;
+  border: 2px solid #3498db;
+  color: #3498db;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.difficulty-button:hover {
+  background-color: #f0f8ff;
+}
+
+.difficulty-button.selected {
+  background-color: #3498db;
+  color: white;
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+  .difficulty-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .difficulty-button {
+    width: 100%;
+    max-width: 200px;
+  }
+}

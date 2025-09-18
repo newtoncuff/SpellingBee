@@ -1,0 +1,14 @@
+.image-display {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto 20px;
+}
+
+.word-image {
+  width: 100%;
+  height: auto;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
