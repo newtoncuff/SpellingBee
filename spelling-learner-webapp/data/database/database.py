@@ -210,39 +210,47 @@ class SpellingBeeDatabase:
         conn = self.get_connection()
         cursor = conn.cursor()
         
-        if recent_combos:
-            cursor.execute('''
-                SELECT c.id, w.text, w.difficulty, i.file_path, i.description 
-                FROM combos c
-                JOIN words w ON c.word_id = w.id
-                JOIN images i ON c.image_id = i.id
-                WHERE c.id NOT IN ({})
-                ORDER BY RANDOM()
-                LIMIT 1
-            '''.format(','.join(['?'] * len(recent_combos))), 
-            recent_combos)
-        else:
-            cursor.execute('''
-                SELECT c.id, w.text, w.difficulty, i.file_path, i.description 
-                FROM combos c
-                JOIN words w ON c.word_id = w.id
-                JOIN images i ON c.image_id = i.id
-                ORDER BY RANDOM()
-                LIMIT 1
-            ''')
+        result = None
         
-        result = cursor.fetchone()
+        if recent_combos and len(recent_combos) > 0:
+            # Build query with NOT IN clause
+            placeholders = ','.join(['?'] * len(recent_combos))
+            query = f'''
+                SELECT c.id, w.text, w.difficulty, i.file_path, i.description 
+                FROM combos c
+                JOIN words w ON c.word_id = w.id
+                JOIN images i ON c.image_id = i.id
+                WHERE w.difficulty = ? AND c.id NOT IN ({placeholders})
+                ORDER BY RANDOM()
+                LIMIT 1
+            '''
+            params = [difficulty] + recent_combos
+            cursor.execute(query, params)
+            result = cursor.fetchone()
+        else:
+            # Simple query without NOT IN clause
+            cursor.execute('''
+                SELECT c.id, w.text, w.difficulty, i.file_path, i.description 
+                FROM combos c
+                JOIN words w ON c.word_id = w.id
+                JOIN images i ON c.image_id = i.id
+                WHERE w.difficulty = ?
+                ORDER BY RANDOM()
+                LIMIT 1
+            ''', (difficulty,))        
+            result = cursor.fetchone()
         
         if not result:
-            # If no unused combos are found, just get any combo of the right difficulty
+            # If no combos found, get any combo of the right difficulty
             cursor.execute('''
                 SELECT c.id, w.text, w.difficulty, i.file_path, i.description 
                 FROM combos c
                 JOIN words w ON c.word_id = w.id
                 JOIN images i ON c.image_id = i.id
+                WHERE w.difficulty = ?
                 ORDER BY RANDOM()
                 LIMIT 1
-            ''')
+            ''', (difficulty,))
             result = cursor.fetchone()
         
         conn.close()
