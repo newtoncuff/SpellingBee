@@ -22,7 +22,6 @@ frontend/yarn-error.log
 
 # Database
 data/*.db
-data/images/*
 !data/images/.gitkeep
 
 # Editor files
