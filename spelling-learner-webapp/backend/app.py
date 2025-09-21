@@ -19,6 +19,10 @@ CORS(app, origins=["http://192.168.1.99:3000", "http://localhost:3000"])
 IMAGES_FOLDER = '/app/data/images'  # Direct path to mounted volume
 DB_PATH = '/app/data/database/spelling_bee.db'  # Direct path to mounted volume
 
+# Add this function
+def get_base_url():
+    return os.getenv('BASE_URL', 'http://192.168.1.99:5000')
+
 # Debug paths
 print(f"DEBUG: IMAGES_FOLDER = {IMAGES_FOLDER}", flush=True)
 print(f"DEBUG: IMAGES_FOLDER exists = {os.path.exists(IMAGES_FOLDER)}", flush=True)
@@ -82,7 +86,7 @@ def get_puzzle():
         'task_id': task_id,
         'puzzle': puzzle,
         'original_word': word,  # For verification on frontend
-        'image_url': f'/api/images/{image_path}',  # Changed this line - removed hardcoded localhost
+        'image_url': f'{get_base_url()}/api/images/{image_path}',  # Full URL
         'image_alt': image_desc,
         'blank_positions': blank_positions
     })

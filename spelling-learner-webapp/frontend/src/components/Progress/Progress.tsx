@@ -13,8 +13,8 @@ const Progress: React.FC<ProgressProps> = ({ consecutiveCorrect }) => {
   for (let i = 0; i < maxStars; i++) {
     const isFilled = i < consecutiveCorrect;
     const imageSrc = isFilled 
-      ? 'http://localhost:5000/api/images/star.jpg'
-      : 'http://localhost:5000/api/images/nostar.jpg';
+      ? 'http://192.168.1.99/api/images/star.jpg'
+      : 'http://192.168.1.99/api/images/nostar.jpg';
     
     stars.push(
       <div key={i} className={`star ${isFilled ? 'filled' : 'empty'}`}>
