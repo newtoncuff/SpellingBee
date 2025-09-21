@@ -43,6 +43,7 @@ spelling-learner-webapp/
 ├── docker-compose.yml     # Docker Compose configuration
 └── README.md              # Project documentation
 ```
+```
 
 ## Installation and Setup
 
