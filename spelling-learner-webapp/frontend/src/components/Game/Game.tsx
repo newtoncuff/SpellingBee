@@ -9,7 +9,7 @@ import Progress from '../Progress/Progress';
 import Fireworks from '../Fireworks/Fireworks';
 import { DifficultyLevel, PuzzleData, LetterStatus, SubmissionResult } from '../../types';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL || '/api';
 
 function Game() {
   const [difficultyLevels, setDifficultyLevels] = useState<DifficultyLevel[]>([]);

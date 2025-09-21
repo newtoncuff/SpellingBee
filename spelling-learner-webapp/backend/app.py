@@ -13,7 +13,7 @@ sys.path.insert(0, data_path)
 from database import SpellingBeeDatabase
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app, origins=["http://192.168.1.99:3000", "http://localhost:3000"])
 
 # Setup paths
 IMAGES_FOLDER = '/app/data/images'  # Direct path to mounted volume
@@ -82,7 +82,7 @@ def get_puzzle():
         'task_id': task_id,
         'puzzle': puzzle,
         'original_word': word,  # For verification on frontend
-        'image_url': f'http://localhost:5000/api/images/{image_path}',
+        'image_url': f'/api/images/{image_path}',  # Changed this line - removed hardcoded localhost
         'image_alt': image_desc,
         'blank_positions': blank_positions
     })
